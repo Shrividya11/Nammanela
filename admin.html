@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel Dashboard</title>
+    <link rel="stylesheet" href="./admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="card" id="loginBox"
+        style="max-width: 400px; margin: 100px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <h1 style="text-align: center;">Admin Login</h1>
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px;">Email / Username</label>
+            <input type="email" id="email" placeholder="Enter email" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px;">Password</label>
+            <input type="password" id="password" placeholder="Enter password" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <button type="button" onclick="handleLogin()" id="submtt"
+            style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;">Login
+            / Set Password</button>
+        <div style="text-align: center; margin-top: 10px;">
+            <a href='/' style='text-decoration: none; color: #666;'>← Back to Site</a>
+        </div>
+    </div>
+
+    <div class="container" id="main-dashboard" style="display: none;">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="./nammanelalogo.png" alt="Logo" class="logo-img">
+                <h2>Admin Panel</h2>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="btn-dashboard"><i class="fa-solid fa-chart-line"></i>
+                    Dashboard<span class="badge">NEW</span></a>
+                <a href="#" class="nav-item" id="btn-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload
+                    Edition</a>
+                <!-- <a href="#" class="nav-item" id="btn-manage"><i class="fa-solid fa-folder-open"></i> Manage Editions</a> -->
+                <a href="#" class="nav-item" id="btn-live-news"><i class="fa-solid fa-newspaper"></i> Live News</a>
+                <a href="#" class="nav-item" id="btn-snippets"><i class="fa-solid fa-scissors"></i> Snippets</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i>
+                    Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <h1 class="page-title" id="main-title">Dashboard</h1>
+                <div class="user-profile">
+                    <span>Admin</span>
+                    <img src="./nammanelalogo.png" alt="Admin" class="avatar">
+                </div>
+            </header>
+
+            <section class="stats-grid" id="dashboard-section">
+                <div class="stat-card">
+                    <div class="stat-icon blue-bg"><i class="fa-solid fa-file-invoice"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-total-editions">0</h3>
+                        <p>Total Editions</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon dark-blue-bg"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-today-editions">0</h3>
+                        <p>Today's Editions</p>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="showViewsPopup()" style="cursor: pointer;">
+                    <div class="stat-icon light-blue-bg"><i class="fa-solid fa-eye"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-total-views">Loading...</h3>
+                        <p>Total Views</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon play-bg"><i class="fa-solid fa-circle-play"></i></div>
+                    <div class="stat-info">
+                        <h3 id="stat-live-stories">0</h3>
+                        <p>Live Stories</p>
+                    </div>
+                </div>
+                <a href="https://nammanela.netlify.app/" class="stat-card" style="text-decoration: none;">
+                    <div class="stat-icon play-bg"><i class="fa-solid fa-eye"></i></div>
+                    <div class="stat-info">
+                        <p>View Paper</p>
+                    </div>
+                </a>
+            </section>
+
+            <div class="card" id="adminForm"
+                style="display: none; padding: 20px; background: white; border-radius: 12px;">
+                <h1 id="form-heading" style="text-align: center; color: #007bff;">Upload Content</h1>
+                <br>
+
+                <div id="video-input-group">
+                    <h2>Live Video Link</h2>
+                    <input type="text" id="ytLink" placeholder="Paste YouTube URL"
+                        style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                </div>
+
+                <div id="pdf-input-group">
+                    <h2>E-Paper PDF</h2>
+                    <input type="file" id="pdfFile" accept="application/pdf"
+                        style="font-size: 20px; width: 100%; margin-bottom: 10px;">
+                </div>
+
+                <button onclick="handleUpload()" id="submt"
+                    style="border-radius: 10px; width: 100%; padding: 12px; background: #007bff; color: white; border: none; cursor: pointer;">Submit</button>
+            </div>
+
+            <section class="snippet-section" id="snippet-section" style="display: none;">
+                <div class="snippet-card">
+                    <div class="snippet-card-head">
+                        <h2>Manage Snippets</h2>
+                    </div>
+
+                    <div class="snippet-form-grid">
+                        <div class="snippet-field">
+                            <label for="snippetPageNumber">Paper Page Number</label>
+                            <input type="number" id="snippetPageNumber" min="1" value="1">
+                        </div>
+                        <div class="snippet-field snippet-field-full">
+                            <label for="snippetImage">Snippet Image</label>
+                            <input type="file" id="snippetImage" accept="image/*">
+                            <p class="snippet-helper" id="snippetStatus">Loading the latest paper preview for snippet
+                                mapping...</p>
+                        </div>
+                    </div>
+
+                    <div class="snippet-preview-shell">
+                        <div class="snippet-preview-stage" id="snippetPreviewStage">
+                            <canvas id="snippetPdfCanvas"></canvas>
+                            <div class="snippet-marking-layer hidden" id="snippetMarkingLayer"></div>
+                            <div class="snippet-selection hidden" id="snippetSelection"></div>
+                            <div class="snippet-empty-state" id="snippetEmptyState">
+                                Upload an edition first. The latest paper preview will appear here for snippet mapping.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="snippet-actions">
+                        <button type="button" class="snippet-btn snippet-btn-secondary" id="clearSnippetSelection">Clear
+                            Selection</button>
+                        <button type="button" class="snippet-btn snippet-btn-primary" id="saveSnippetMapping">Save
+                            Snippet Mapping</button>
+                    </div>
+
+                    <div class="snippet-saved-block">
+                        <div class="snippet-saved-head">
+                            <h3>Saved Snippets</h3>
+                            <p id="snippetSavedSummary">No snippets saved yet.</p>
+                        </div>
+                        <div class="snippet-saved-grid" id="snippetSavedGrid"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div id="pdfPopup" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Available Editions</h2>
+                <button onclick="closePdfPopup()" class="close-btn">&times;</button>
+            </div>
+            <div id="pdfListContainer" class="pdf-list-body">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+    <script src="./snippets.js"></script>
+    <script src="./admin.js"></script>
+</body>
+
+</html>

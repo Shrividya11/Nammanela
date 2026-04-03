@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ನಮ್ಮ ನೆಲ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    <div id="neonbody">
+        <style>
+            :root {
+                --base-font-size: 100px;
+                --dark-blue: #0044ff;
+                --bright-red: #ff0000;
+                --pure-black: #000000;
+                --bg-color: #f4f1e8;
+            }
+
+            #neonbody {
+                background-color: var(--bg-color);
+                margin: 0;
+                overflow: hidden;
+                /* Prevents scrolling during splash */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+
+            .neon-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                /* Sits on top of everything */
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: var(--bg-color);
+                z-index: 1000;
+                /* Highest priority */
+            }
+
+            .line {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .letter-box {
+                height: var(--base-font-size);
+                overflow: visible;
+            }
+
+            .letter-box svg {
+                height: 100%;
+                width: auto;
+                overflow: visible;
+                font-family: 'Tunga', 'Arial Black', sans-serif;
+                font-weight: 900;
+            }
+
+            .letter-box text {
+                font-size: 50px;
+                stroke-width: 10px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                paint-order: stroke fill;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+            }
+
+            /* --- THE GLOW ANIMATIONS --- */
+            .firstsplit text {
+                stroke: var(--dark-blue);
+                animation: glowfirstsplit 4s ease-in-out infinite;
+                font-style: italic;
+                font-size: 80px;
+            }
+
+            @keyframes glowfirstsplit {
+                0% {
+                    stroke-dashoffset: 1000;
+                    fill: transparent;
+                    filter: drop-shadow(0 0 0px transparent);
+                }
+
+                30% {
+                    stroke-dashoffset: 0;
+                    fill: var(--bright-red);
+                    filter: drop-shadow(0 0 8px var(--dark-blue)) drop-shadow(0 0 20px var(--dark-blue));
+                }
+
+                80% {
+                    stroke-dashoffset: 0;
+                    fill: var(--bright-red);
+                    filter: drop-shadow(0 0 10px var(--dark-blue));
+                }
+
+                100% {
+                    stroke-dashoffset: -1000;
+                    fill: transparent;
+                }
+            }
+
+            .secondsplit text {
+                stroke: var(--dark-blue);
+                animation: glowsecondsplit 4s ease-in-out infinite;
+                font-style: italic;
+                font-size: 80px;
+            }
+
+            @keyframes glowsecondsplit {
+                0% {
+                    stroke-dashoffset: 1000;
+                    fill: transparent;
+                    filter: drop-shadow(0 0 0px transparent);
+                }
+
+                30% {
+                    stroke-dashoffset: 0;
+                    fill: green;
+                    filter: drop-shadow(0 0 8px var(--dark-blue)) drop-shadow(0 0 20px var(--bright-red));
+                }
+
+                80% {
+                    stroke-dashoffset: 0;
+                    fill: green;
+                    filter: drop-shadow(0 0 10px var(--dark-blue));
+                }
+
+                100% {
+                    stroke-dashoffset: -1000;
+                    fill: transparent;
+                }
+            }
+
+            .generic text {
+                stroke: #ff0000df;
+                animation: glowWhite 4s ease-in-out infinite;
+            }
+
+            @keyframes glowWhite {
+                0% {
+                    stroke-dashoffset: 1000;
+                    fill: transparent;
+                    filter: drop-shadow(0 0 0px transparent);
+                }
+
+                30% {
+                    stroke-dashoffset: 0;
+                    fill: #fff;
+                    filter: drop-shadow(0 0 10px #fff) drop-shadow(0 0 25px #fff);
+                }
+
+                80% {
+                    stroke-dashoffset: 0;
+                    fill: #0d00c8;
+                }
+
+                100% {
+                    stroke-dashoffset: -1000;
+                    fill: transparent;
+                }
+            }
+
+            @media (max-width:768px) {
+                .neon-wrapper {
+                    padding: 0;
+                    /* Centered for mobile */
+                    gap: 20px;
+                }
+
+                .secondword {
+                    flex-direction: column;
+                }
+
+                .letter-box {
+                    height: 60px;
+                }
+
+                /* Scale down for small screens */
+            }
+
+            /* Transition effects */
+            .fade-out {
+                opacity: 0;
+                transition: opacity 1s ease-out;
+                pointer-events: none;
+            }
+
+            .hidden {
+                display: none !important;
+            }
+        </style>
+
+        <div class="neon-wrapper">
+            <div class="line brand-line">
+                <span class="letter-box namma">
+                    <svg viewBox="0 0 100 100"><text x="50%" y="70%" text-anchor="middle">ನ</text></svg>
+                </span>
+                <span class="letter-box namma">
+                    <svg viewBox="0 0 130 100"><text x="50%" y="70%" text-anchor="middle">ಮ್ಮ</text></svg>
+                </span>
+                <span class="letter-box nela">
+                    <svg viewBox="0 0 100 100"><text x="50%" y="70%" text-anchor="middle">ನೆ</text></svg>
+                </span>
+                <span class="letter-box nela">
+                    <svg viewBox="0 0 60 100"><text x="50%" y="70%" text-anchor="middle">ಲ</text></svg>
+                </span>
+            </div>
+
+            <div class="line welcome-line">
+                <span class="letter-box generic"><svg viewBox="0 0 80 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಇ</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 50 100"><text x="50%" y="70%"
+                            text-anchor="middle">-</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 110 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಪೇ</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 100 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಪ</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 80 100"><text x="50%" y="70%"
+                            text-anchor="middle">ರ್</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 70 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಗೆ</text></svg></span>
+            </div>
+
+            <div class="line welcome-line">
+                <span class="letter-box generic"><svg viewBox="0 0 100 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಸು</text></svg></span>
+                <span class="letter-box generic "><svg viewBox="0 0 160 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಸ್ವಾ</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 60 100"><text x="50%" y="70%"
+                            text-anchor="middle">ಗ</text></svg></span>
+                <span class="letter-box generic"><svg viewBox="0 0 80 100"><text x="50%" y="70%"
+                            text-anchor="middle">ತ</text></svg></span>
+            </div>
+        </div>
+        <script>
+            window.addEventListener('load', () => {
+                const splash = document.querySelector('.neon-wrapper');
+
+                // 1. Wait 4 seconds (4000ms)
+                setTimeout(() => {
+                    // 2. Start fade out
+                    splash.classList.add('fade-out');
+
+                    // 3. Remove completely after 1s fade finishes
+                    setTimeout(() => {
+                        splash.classList.add('hidden');
+                        document.body.style.overflow = 'auto'; // Allow scrolling again
+                    }, 1000);
+
+                }, 3100);
+            });
+        </script>
+    </div>
+    <!-- <div id="pageIndicator">Page 1</div>
+    <div id="paperBadge">Loading...</div>
+    <div id="customScrollContainer" class="custom-scroll-wrapper"> -->
+    <!-- <div id="customScrollThumb" class="custom-scroll-content"></div> -->
+    <!-- <button class="custom-scroll-content left">⏮️⏪◀️⬅️</button>
+        <button class="custom-scroll-content right">➡️▶️⏩⏭️</button>
+    </div> -->
+    <nav class="navbar">
+        <div class="logo"><img src="./nammanelalogo.png" height="60"></div>
+        <div class="nav-right">
+            <button class="date-btn large" onclick="showPopup('aboutContentPop')">About</button>
+            <button class="date-btn large" onclick="showPopup('submitArticlePop')">Submit Article</button>
+            <div class="calendar-anchor">
+                <button class="date-btn" id="calendarBtn">📅</button>
+                <input type="date" id="datePicker">
+            </div>
+            <div class="burger" id="burger" onclick="toggleMenu()">☰</div>
+        </div>
+    </nav>
+
+
+    <div class="side-menu" id="sideMenu">
+        <button class="date-btn" onclick="showPopup('aboutContentPop')">About</button>
+        <button class="date-btn" onclick="showPopup('submitArticlePop')">Submit Article</button>
+    </div>
+
+    <section class="paper-section">
+        <div class="paper-toolbar">
+            <!-- Marquee Text -->
+            <div class="marquee-wrapper mobb">
+                <p class="marquee-text">ನಮ್ಮ ನೆಲ ಕನ್ನಡ ದಿನಪತ್ರಿಕೆ - ನಿಮ್ಮ ನೆಚ್ಚಿನ ಸುದ್ದಿ ಸಂಸ್ಥೆ...</p>
+            </div>
+            <div id="readerCountContainer" style="color: red; font-weight: bold; padding: 0px;">👁️ <span
+                    id="readerCount">0</span></div>
+            <div class="marquee-wrapper dsktt">
+                <p class="marquee-text">ನಮ್ಮ ನೆಲ ಕನ್ನಡ ದಿನಪತ್ರಿಕೆ - ನಿಮ್ಮ ನೆಚ್ಚಿನ ಸುದ್ದಿ ಸಂಸ್ಥೆ...</p>
+            </div>
+            <h1 id="editionTitle" style="padding: 0;">Edition</h1>
+        </div>
+
+        <button class="fixed-nav-btn left" id="fixedPrev"><i class="fas fa-chevron-left"></i></button>
+        <button class="fixed-nav-btn right" id="fixedNext"><i class="fas fa-chevron-right"></i></button>
+        <div class="viewer-wrapper">
+            <div id="thumbnailSidebar" class="thumbnail-sidebar"></div>
+            <div class="viewer-container">
+                <canvas id="pdf-render"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎥 Video Section -->
+    <section class="video-container">
+        <video id="myVideo" controls playsinline hidden></video>
+        <iframe id="videoFrame" title="Video player" allow="autoplay; encrypted-media; compute-pressure" allowfullscreen
+            hidden></iframe>
+    </section>
+
+    <div id="popupOverlay" class="modal-overlay" onclick="closePopup(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closePopup()">&times;</span>
+            <div id="popupBody"></div>
+        </div>
+    </div>
+
+    <section class="about-section hidden-content" id="aboutContentPop">
+        <div class="section-title-wrap">
+            <h2>About ನಮ್ಮ ನೆಲ</h2>
+        </div>
+        <div class="about-content">
+            <p><strong>Owner, Publisher &amp; Printer:</strong> PRABHAKAR</p>
+            <p><strong>Editor:</strong> PRABHAKAR</p>
+            <p><strong>Published At:</strong> R/O. # 180 Near Anjaneyya Temple, Lake Road, Post: Hunsihalhuda,
+                Tq:
+                Dist:
+                Raichur-584136, Karnataka</p>
+            <p><strong>Printed At:</strong> PADMAVATHI PRINTERS, R/O. # 180, Near Anjaneyya Temple, Lake Road,
+                Post:
+                Hunsihalhuda, Tq: Dist: Raichur-584136, Karnataka</p>
+            <p><strong>Editor:</strong> Prabhakar Huded (M.A Journalism)</p>
+            <p><strong>RNI:</strong> KARKAN/2023/88419</p>
+            <p><strong>Price:</strong> 2.00</p>
+            <p><strong>Post Reg No:</strong> RCR/L/RNP/103/2025-2027</p>
+            <p><strong>Location:</strong> Raichur</p>
+        </div>
+    </section>
+
+    <div id="submitArticlePop" class="hidden-content">
+        <div class="submission-header">
+            <h2>Send Your Article</h2>
+            <p>Share your article request with the team.</p>
+        </div>
+        <form class="submission-form">
+            <div class="form-grid">
+                <div class="form-group"><label>Your Name</label><input type="text" required></div>
+                <div class="form-group"><label>Phone Number</label><input type="tel" required></div>
+                <div class="form-group full"><label>Title / Headline</label><input type="text" required></div>
+                <div class="form-group full"><label>Your Article</label><textarea rows="5" required></textarea></div>
+            </div>
+            <button type="submit" class="toolbar-primary">Submit Request</button>
+        </form>
+    </div>
+
+    <footer class="footer" id="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="logo-description"><br>
+                    <p>Namma Nela - It is a digital version of a printed newspaper that can be read online using a
+                        computer, tablet, or mobile device.</p><br>
+                </div>
+            </div>
+            <div class="footer-social-section">
+                <div class="social-links">
+                    <a href="https://www.youtube.com/@%E0%B2%A8%E0%B2%AE%E0%B3%8D%E0%B2%AE%E0%B2%A8%E0%B3%86%E0%B2%B2%E0%B2%95%E0%B2%A8%E0%B3%8D%E0%B2%A8%E0%B2%A1"
+                        class="social-icon youtube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/919876543210" class="social-icon whatsapp"><i
+                            class="fab fa-whatsapp"></i></a>
+                </div>
+                <div class="powered-by">
+                    <p>© 2026 ನಮ್ಮ ನೆಲ. All rights reserved.</p>
+                    <p>Atelier by <a href="https://sharatechnovate.com/" style="color:aqua;text-decoration:none;">ShaRa
+                            Technovate</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ---------- FLOATING ACTION BUTTONS ---------- -->
+    <div class="floating-buttons leftfloat">
+        <a href="https://wa.me/919876543210" target="" class="fab-btn whatsapp" title="Chat on WhatsApp">
+            <i class="fab fa-whatsapp"></i></a>
+    </div>
+    <div class="floating-buttons rightfloat">
+        <a href="tel:+919876543210" class="fab-btn call" title="Call Us">
+            <i class="fas fa-phone"></i></a>
+    </div>
+    <div id="zoombuttons" class="floating-buttons otherbtns">
+        <button class="fab-btn zoom minus" title="Zoom Out"><i class="fas fa-minus"></i></button>
+        <span>&nbsp; ZOOM &nbsp;</span>
+        <button class="fab-btn zoom plus" title="Zoom In"><i class="fas fa-plus"></i></button>
+        <button class="fab-btn zoom snip" id="snipToggle" title="Snip Tool">✂️</button>
+    </div>
+
+    <div id="videoNotify" class="notify-overlay" style="display: none;">
+        <div class="notify-card">
+            <div class="notify-icon"><i class="fa-solid fa-circle-play"></i></div>
+            <div class="notify-content">
+                <h3>New Live Story!</h3>
+                <p>A new video has been uploaded. Watch it now.</p>
+                <button id="viewVideoBtn" class="view-btn">Watch Video</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+    <script src="pdf.js"></script>
+    <script src="zoom.js"></script>
+</body>
+
+</html>
