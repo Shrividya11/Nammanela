@@ -21,6 +21,11 @@
     let isSnipMode = false;
     let isDragging = false;
     let dragStart = null;
+    let activePointerId = null;
+
+    function getViewerTouchAction() {
+        return viewerContainer.scrollWidth > viewerContainer.clientWidth ? "pan-x pan-y" : "pan-y";
+    }
 
     function syncOverlayBounds() {
         const canvasRect = canvas.getBoundingClientRect();
@@ -35,6 +40,7 @@
         isSnipMode = active;
         isDragging = false;
         dragStart = null;
+        activePointerId = null;
         syncOverlayBounds();
         overlay.classList.toggle("is-active", active);
         overlay.classList.remove("is-dragging");
@@ -42,6 +48,8 @@
         selection.style.height = "0px";
         snipToggle.classList.toggle("is-active", active);
         viewerContainer.classList.toggle("snip-mode", active);
+        overlay.style.touchAction = active ? "none" : "";
+        viewerContainer.style.touchAction = active ? "none" : getViewerTouchAction();
     }
 
     function getCanvasRect() {
@@ -281,8 +289,12 @@
         shareSnip("whatsapp", blob);
     }
 
-    function handleMouseDown(event) {
-        if (!isSnipMode || event.button !== 0) {
+    function handlePointerDown(event) {
+        if (!isSnipMode) {
+            return;
+        }
+
+        if (event.pointerType === "mouse" && event.button !== 0) {
             return;
         }
 
@@ -298,13 +310,24 @@
 
         event.preventDefault();
         isDragging = true;
+        activePointerId = event.pointerId;
         overlay.classList.add("is-dragging");
         dragStart = clampPoint(event.clientX, event.clientY);
+        if (typeof overlay.setPointerCapture === "function") {
+            try {
+                overlay.setPointerCapture(event.pointerId);
+            } catch (error) {
+            }
+        }
         updateSelection(event.clientX, event.clientY);
     }
 
-    function handleMouseMove(event) {
+    function handlePointerMove(event) {
         if (!isSnipMode || !isDragging) {
+            return;
+        }
+
+        if (activePointerId !== null && event.pointerId !== activePointerId) {
             return;
         }
 
@@ -312,13 +335,24 @@
         updateSelection(event.clientX, event.clientY);
     }
 
-    function handleMouseUp(event) {
+    function handlePointerUp(event) {
         if (!isSnipMode || !isDragging) {
+            return;
+        }
+
+        if (activePointerId !== null && event.pointerId !== activePointerId) {
             return;
         }
 
         event.preventDefault();
         isDragging = false;
+        if (typeof overlay.releasePointerCapture === "function" && activePointerId !== null) {
+            try {
+                overlay.releasePointerCapture(activePointerId);
+            } catch (error) {
+            }
+        }
+        activePointerId = null;
         overlay.classList.remove("is-dragging");
         updateSelection(event.clientX, event.clientY);
         captureSelection();
@@ -329,9 +363,10 @@
         setSnipMode(!isSnipMode);
     });
 
-    overlay.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    overlay.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("pointermove", handlePointerMove);
+    document.addEventListener("pointerup", handlePointerUp);
+    document.addEventListener("pointercancel", handlePointerUp);
 
     viewerContainer.addEventListener("scroll", () => {
         if (!isSnipMode || !dragStart) return;

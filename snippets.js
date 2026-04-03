@@ -12,7 +12,8 @@
         isDrawing: false,
         selection: null,
         activePointerId: null,
-        canvasBounds: null
+        canvasBounds: null,
+        renderFrame: null
     };
 
     const els = {};
@@ -115,7 +116,8 @@
         els.pageNumber.value = safePage;
 
         const page = await state.pdfDoc.getPage(safePage);
-        const viewport = page.getViewport({ scale: 1.45 });
+        const baseViewport = page.getViewport({ scale: 1 });
+        const viewport = page.getViewport({ scale: getRenderScale(baseViewport.width) });
         els.canvas.width = viewport.width;
         els.canvas.height = viewport.height;
         await page.render({ canvasContext: els.ctx, viewport }).promise;
@@ -132,6 +134,29 @@
         if (!els.section || !els.canvas || !state.pdfDoc) return;
         await afterNextPaint();
         syncMarkingLayer();
+    }
+
+    function getRenderScale(baseWidth) {
+        const desktopScale = 1.45;
+        if (!els.stage || !baseWidth) {
+            return desktopScale;
+        }
+
+        const stageStyles = window.getComputedStyle(els.stage);
+        const horizontalPadding =
+            (parseFloat(stageStyles.paddingLeft) || 0) +
+            (parseFloat(stageStyles.paddingRight) || 0);
+        const availableWidth = Math.max(els.stage.clientWidth - horizontalPadding, 240);
+        const fitScale = availableWidth / baseWidth;
+        return Math.max(Math.min(desktopScale, fitScale), 0.35);
+    }
+
+    function queueResponsiveRender() {
+        if (!state.pdfDoc || state.renderFrame !== null) return;
+        state.renderFrame = window.requestAnimationFrame(() => {
+            state.renderFrame = null;
+            renderPage(state.currentPage || 1);
+        });
     }
 
     function syncMarkingLayer() {
@@ -540,7 +565,8 @@
         window.addEventListener("pointerup", handlePointerUp);
         window.addEventListener("pointercancel", handlePointerUp);
         els.stage.addEventListener("scroll", syncMarkingLayer);
-        window.addEventListener("resize", syncMarkingLayer);
+        window.addEventListener("resize", queueResponsiveRender);
+        window.addEventListener("orientationchange", queueResponsiveRender);
         els.imageInput.addEventListener("change", handleImageUpload);
         els.pageNumber.addEventListener("change", () => renderPage(els.pageNumber.value));
         els.clearBtn.addEventListener("click", () => {

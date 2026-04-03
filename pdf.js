@@ -124,6 +124,8 @@ function renderPage(num) {
         currentRenderTask = page.render(renderContext);
         currentRenderTask.promise.then(() => {
             currentRenderTask = null;
+            canvas.dataset.baseDisplayWidth = String(canvas.getBoundingClientRect().width);
+            canvas.dataset.baseDisplayHeight = String(canvas.getBoundingClientRect().height);
             currentScaleFactor = 1;
             applyZoom();
             scheduleSnippetHotspotSync();
@@ -141,26 +143,28 @@ function renderPage(num) {
 
 // --- RESTORED & FIXED ZOOM LOGIC ---
 function applyZoom() {
-    // 1. Restore the visual scale from your working old code
+    const baseWidth = parseFloat(canvas.dataset.baseDisplayWidth || canvas.offsetWidth || 0);
+    const baseHeight = parseFloat(canvas.dataset.baseDisplayHeight || canvas.offsetHeight || 0);
+    const zoomedWidth = baseWidth * currentScaleFactor;
+    const zoomedHeight = baseHeight * currentScaleFactor;
+
     canvas.style.transformOrigin = "top left";
-    canvas.style.transform = `scale(${currentScaleFactor})`;
-
-    // 2. Calculate real zoomed dimensions for scrolling
-    const zoomedWidth = canvas.offsetWidth * currentScaleFactor;
-    const zoomedHeight = canvas.offsetHeight * currentScaleFactor;
-    viewerContainer.style.height = zoomedHeight + "px";
-
-    // 3. Update container size to allow vertical/horizontal scrolling
-    viewerContainer.style.height = zoomedHeight + "px";
+    canvas.style.transform = "none";
 
     if (currentScaleFactor > 1) {
         if (scrollWrapper) scrollWrapper.style.display = 'flex';
-        // scrollThumb.style.width = zoomedWidth + "px";
+        canvas.style.maxWidth = "none";
+        canvas.style.width = zoomedWidth + "px";
+        canvas.style.height = zoomedHeight + "px";
         viewerContainer.style.overflowX = "auto";
+        viewerContainer.style.touchAction = "pan-x pan-y";
     } else {
         if (scrollWrapper) scrollWrapper.style.display = 'none';
-        viewerContainer.style.height = "auto";
+        canvas.style.width = "";
+        canvas.style.height = "";
+        canvas.style.maxWidth = "100%";
         viewerContainer.scrollLeft = 0;
+        viewerContainer.style.touchAction = "pan-y";
         if (scrollWrapper) {
             scrollWrapper.scrollLeft = 0;
         }
