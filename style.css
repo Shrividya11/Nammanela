@@ -850,6 +850,44 @@ canvas {
     gap: 10px;
 }
 
+@media (min-width: 769px) {
+    .paper-section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .paper-toolbar {
+        padding: 10px 18px 14px;
+        gap: 16px;
+    }
+
+    .paper-toolbar #editionTitle {
+        margin-left: 10px;
+    }
+
+    .paper-toolbar #readerCountContainer {
+        margin-right: 10px;
+    }
+
+    .viewer-wrapper {
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    .viewer-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        width: calc(100vw - 260px);
+        min-height: 85vh;
+        white-space: normal;
+    }
+
+    .otherbtns {
+        display: flex;
+    }
+}
+
 @media (max-width: 768px) {
     body {
         padding-top: 68px;
@@ -876,10 +914,12 @@ canvas {
     }
 
     .paper-toolbar {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
         padding: 10px;
-        gap: 0px;
-        align-items: flex-start;
+        gap: 8px;
+        align-items: center;
     }
 
     .paper-toolbar .marquee-wrapper {
@@ -894,15 +934,14 @@ canvas {
     .paper-toolbar #editionTitle {
         order: 2;
         align-self: center;
-        margin-left: 24px;
-        margin-right: auto;
+        margin: 0;
     }
 
     .paper-toolbar #readerCountContainer {
-        order: 3;
+        order: 2;
         align-self: center;
+        margin: 0;
         margin-left: auto;
-        margin-right: 24px;
     }
 
     .toolbar-btn {
@@ -1248,7 +1287,7 @@ canvas {
     z-index: -1;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
     .otherbtns {
         display: none;
     }
@@ -1782,14 +1821,16 @@ video,
     height: 20px;
 }
 
-.viewer-container {
-    display: block;
-    width: 100vw;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    position: relative;
+@media (max-width: 768px) {
+    .viewer-container {
+        display: block;
+        width: 100vw;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+    }
 }
 
 .fab-btn.zoom.is-active {
