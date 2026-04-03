@@ -882,6 +882,29 @@ canvas {
         align-items: flex-start;
     }
 
+    .paper-toolbar .marquee-wrapper {
+        order: 1;
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto 10px;
+        align-self: center;
+        opacity: 0.82;
+    }
+
+    .paper-toolbar #editionTitle {
+        order: 2;
+        align-self: center;
+        margin-left: 24px;
+        margin-right: auto;
+    }
+
+    .paper-toolbar #readerCountContainer {
+        order: 3;
+        align-self: center;
+        margin-left: auto;
+        margin-right: 24px;
+    }
+
     .toolbar-btn {
         flex: 1 1 auto;
     }
@@ -1828,15 +1851,65 @@ video,
 
 .snip-result-actions {
     display: flex;
-    gap: 8px;
+    gap: 12px 10px;
     justify-content: center;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     margin-top: 16px;
-    white-space: nowrap;
+    white-space: normal;
 }
 
 .snip-result-actions .snippet-share-btn {
-    padding: 9px 12px;
+    width: 110px;
+    min-width: 110px;
+    max-width: 110px;
+    padding: 10px 12px;
     font-size: 13px;
-    min-width: auto;
+    text-align: center;
+}
+
+.snip-result-actions .snippet-share-btn:nth-child(4) {
+    margin-left: 58px;
+}
+
+@media (max-width: 768px) {
+    .clean-article-popup {
+        width: min(94vw, 380px) !important;
+        max-width: 94vw !important;
+        padding: 14px !important;
+    }
+
+    .snip-result-popup {
+        padding-top: 4px;
+        max-height: 78vh;
+    }
+
+    .snip-result-image {
+        border-radius: 10px;
+        max-height: 46vh;
+    }
+
+    .snip-result-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px 8px;
+        margin-top: 14px;
+    }
+
+    .snip-result-actions .snippet-share-btn {
+        width: 88px;
+        min-width: 88px;
+        max-width: 88px;
+        padding: 10px 6px;
+        font-size: 11px;
+    }
+
+    .snip-result-actions .snippet-share-btn:nth-child(4) {
+        margin-left: 48px;
+    }
+}
+
+@media (max-width: 420px) {
+    .snip-result-image {
+        max-height: 40vh;
+    }
 }
